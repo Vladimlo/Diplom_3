@@ -2,35 +2,27 @@ package checks;
 
 import io.qameta.allure.junit4.DisplayName;
 import org.example.config.AppConfig;
-import org.example.user.RandomUser;
-import org.example.user.User;
-import org.example.user.UserClient;
 import org.example.user.UserCreds;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import pageObjects.LoginPage;
-import pageObjects.RegisterPage;
+import page_objects.LoginPage;
+import page_objects.RegisterPage;
 
 import static org.example.config.DriverFarm.getDriver;
 
 @DisplayName("Проверка регистрации пользователя")
 public class TestRegistration extends Check {
 
-    UserClient userClient;
-    User user;
-
     @Before
+    @Override
     public void classSetup() {
         driver = getDriver(AppConfig.REGISTER_PAGE);
-        userClient = new UserClient();
-        user = RandomUser.getRandomUser();
     }
 
     @Test
     @DisplayName("Проверка регистрации пользователя")
-    public void testRegistration() throws InterruptedException {
+    public void testRegistration() {
         RegisterPage registerPage = new RegisterPage(driver);
         registerPage.userRegistration(user.getName(), user.getEmail(), user.getPassword());
         userClient.login(new UserCreds(user));
@@ -45,11 +37,5 @@ public class TestRegistration extends Check {
         registerPage.userRegistration(user.getName(), user.getEmail(), "test");
         Assert.assertEquals("Сообщение об ошибке не корректное",
                 "Некорректный пароль", registerPage.getEasyPasswordMessage());
-    }
-
-    @After
-    public void tearDown() {
-        userClient.delete();
-        driver.quit();
     }
 }

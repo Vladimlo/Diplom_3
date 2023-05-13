@@ -1,8 +1,12 @@
-package pageObjects;
+package page_objects;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.Map;
 
 public class MainPage extends Page {
 
@@ -14,6 +18,7 @@ public class MainPage extends Page {
     private final By bunHeader = By.xpath(".//h2[text() = 'Булки']");
     private final By sauceHeader = By.xpath(".//h2[text() = 'Соусы']");
     private final By topingHeader = By.xpath(".//h2[text() = 'Начинки']");
+    private final By container = By.xpath(".//div[@class = 'BurgerIngredients_ingredients__menuContainer__Xu3Mo']");
 
     public MainPage(WebDriver driver) {
         super(driver);
@@ -31,24 +36,34 @@ public class MainPage extends Page {
 
     @Step("Переход ко вкладке Булок")
     public void clickBunTab() {
-        clickOnElement(driver.findElement(bunTab));
+        driver.findElement(bunTab).click();
     }
 
     @Step("Переход ко вкладке Соусов")
     public void clickSauceTab() {
-        clickOnElement(driver.findElement(sauceTab));
+       driver.findElement(sauceTab).click();
     }
 
     @Step("Переход ко вкладке Начинок")
     public void clickTopingTab() {
-        clickOnElement(driver.findElement(topingTab));
+        driver.findElement(topingTab).click();
     }
 
     @Step("Получение позиций заголовков конструктора")
-    public Integer[] getPositions() {
-        Integer[] positions = {driver.findElement(bunHeader).getLocation().y,
-                driver.findElement(sauceHeader).getLocation().y,
-                driver.findElement(topingHeader).getLocation().y};
-        return positions;
+    public boolean isCorrectPosition(String headerName) {
+
+        Map<String, By> headers = Map.of(
+                "Булки", bunHeader,
+                "Соусы", sauceHeader,
+                "Начинки", topingHeader
+        );
+
+        if(!headers.containsKey(headerName)){
+            return false;
+        }
+
+        return new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                drv -> (Math.abs(drv.findElement(container).getLocation().y -
+                        drv.findElement(headers.get(headerName)).getLocation().y) < 1));
     }
 }

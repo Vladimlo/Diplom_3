@@ -60,10 +60,16 @@ public class UserClient {
                     .when()
                     .delete(UPDATE_PATH)
                     .then();
+
+            System.out.println("Удаление пользователя с токеном " + token);
         }
     }
 
     public String getToken(int index){
         return tokens.get(index);
+    }
+
+    public int getTokensCount(){
+        return tokens.size();
     }
 }

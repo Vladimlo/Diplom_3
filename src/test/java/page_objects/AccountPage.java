@@ -1,4 +1,4 @@
-package pageObjects;
+package page_objects;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
@@ -15,7 +15,7 @@ public class AccountPage extends Page {
     }
 
     @Step("Проверка текущей страницы")
-    public boolean IsAccountPage() {
+    public boolean isAccountPage() {
         return !driver.findElements(discriptionText).isEmpty();
     }
 

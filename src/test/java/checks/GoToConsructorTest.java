@@ -1,33 +1,15 @@
 package checks;
 
 import io.qameta.allure.junit4.DisplayName;
-import org.example.config.AppConfig;
-import org.example.user.RandomUser;
-import org.example.user.User;
-import org.example.user.UserClient;
 import org.example.user.UserCreds;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import pageObjects.AccountPage;
-import pageObjects.LoginPage;
-import pageObjects.MainPage;
-
-import static org.example.config.DriverFarm.getDriver;
+import page_objects.AccountPage;
+import page_objects.LoginPage;
+import page_objects.MainPage;
 
 @DisplayName("Проверка переходов к конструктору")
 public class GoToConsructorTest extends Check {
-
-    User user;
-    UserClient userClient;
-
-    @Before
-    public void classSetup() {
-        driver = getDriver(AppConfig.LOGIN_PAGE);
-        user = RandomUser.getRandomUser();
-        userClient = new UserClient();
-    }
 
     @Test
     @DisplayName("Проверка перехода из личного кабинета клиента в конструктор по логотипу")
@@ -63,11 +45,5 @@ public class GoToConsructorTest extends Check {
 
         MainPage mainPage = new MainPage(driver);
         Assert.assertTrue(mainPage.isManePage());
-    }
-
-    @After
-    public void tearDown() {
-        driver.quit();
-        userClient.delete();
     }
 }
